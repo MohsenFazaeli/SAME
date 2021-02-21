@@ -1,4 +1,7 @@
 # A Meta-Learning Approach for Graph Representation Learning in Multi-Task Settings
+This is the branch that works with latest packages from https://github.com/DavideBuffelli/SAME
+
+
 
 Reference code for the paper: "A Meta-Learning Approach for Graph Representation Learning in Multi-Task Settings", presentedat the NeurIPS Workshop on Meta-Learning (MetaLearn) 2020.
 Please cite the paper if you use this code in your own work. 
@@ -76,13 +79,13 @@ python train.py -dataset-name ENZYMES --batch-size 16 --embedding-dim 256 --epoc
 
 This code requires Python 3.6 (or higher) and makes use of the following packages:
 
-* PyTorch 1.4.0
-* PyTorch Geometric 1.4.3 [(Installation Instructions)](https://github.com/rusty1s/pytorch_geometric)
-* TorchMeta 1.4.0 [(Installation Instructions)](https://github.com/tristandeleu/pytorch-meta)
-* Matplotlib 3.2.1
-* NetworkX 2.4
-* scikit-learn 0.22.2
-* tqdm 4.45.0
+* PyTorch 1.7.1
+* PyTorch Geometric 1.6.3 [(Installation Instructions)](https://github.com/rusty1s/pytorch_geometric)
+* TorchMeta 2.0.0 [(Installation Instructions)](https://github.com/tristandeleu/pytorch-meta)
+* Matplotlib 3.3.3
+* NetworkX 2.5
+* scikit-learn 0.24.0
+* tqdm 4.54.1
 
 ## License
 Refer to the file [LICENSE](LICENSE)
