@@ -23,9 +23,9 @@ class MetaGCN(MetaModule):
         self.dropout = dropout
         
     def forward(self, inputs, params=None):
-        x = self.gcn_1(inputs.x, inputs.edge_index, params=get_subdict(params, 'gcn_1'))
+        x = self.gcn_1(inputs.x, inputs.edge_index, params=self.get_subdict(params, 'gcn_1'))
         if self.batch_norm:
-            x = self.bn1(x, params=get_subdict(params, 'bn1'))
+            x = self.bn1(x, params=self.get_subdict(params, 'bn1'))
         x = F.relu(x)
         #if self.dropout:
         #     x = F.dropout(x, training=self.training)
@@ -33,9 +33,9 @@ class MetaGCN(MetaModule):
             x = F.normalize(x, p=2, dim=1)
 
         residual2 = x
-        x = self.gcn_2(x, inputs.edge_index, params=get_subdict(params, 'gcn_2'))
+        x = self.gcn_2(x, inputs.edge_index, params=self.get_subdict(params, 'gcn_2'))
         if self.batch_norm:
-            x = self.bn2(x, params=get_subdict(params, 'bn2'))
+            x = self.bn2(x, params=self.get_subdict(params, 'bn2'))
         x = F.relu(x)
         if self.residual_con:
             x = x + residual2
@@ -43,9 +43,9 @@ class MetaGCN(MetaModule):
             x = F.normalize(x, p=2, dim=1)
 
         residual3 = x
-        x = self.gcn_3(x, inputs.edge_index, params=get_subdict(params, 'gcn_3'))
+        x = self.gcn_3(x, inputs.edge_index, params=self.get_subdict(params, 'gcn_3'))
         if self.batch_norm:
-            x = self.bn3(x, params=get_subdict(params, 'bn3'))
+            x = self.bn3(x, params=self.get_subdict(params, 'bn3'))
         x = F.relu(x)
         if self.residual_con:
             x = x + residual3
@@ -66,16 +66,16 @@ class MetaOutputLayers(MetaModule):
     
     def forward(self, node_embs, inputs, task_selector, params):
         if task_selector == "nc":
-            x = self.nc_output_layer(node_embs, params=get_subdict(params, 'nc_output_layer'))
+            x = self.nc_output_layer(node_embs, params=self.get_subdict(params, 'nc_output_layer'))
         elif task_selector == "gc":
             x = self.gc_output_layer(node_embs, 
                                      inputs.batch, 
-                                     params=get_subdict(params, 'gc_output_layer'))
+                                     params=self.get_subdict(params, 'gc_output_layer'))
         elif  task_selector == "lp":
             x = self.lp_output_layer(node_embs, 
                                      inputs.pos_edge_index, 
                                      inputs.neg_edge_index, 
-                                     params=get_subdict(params, 'lp_output_layer'))
+                                     params=self.get_subdict(params, 'lp_output_layer'))
         else:
             print("Invalid task selector.")
         
@@ -94,7 +94,7 @@ class MultitaskGCN(MetaModule):
         self.dropout = dropout
 
     def forward(self, inputs, task_selector=None, params=None, return_embeddings=False):
-        x = self.gcn(inputs, params=get_subdict(params, 'gcn'))
+        x = self.gcn(inputs, params=self.get_subdict(params, 'gcn'))
         
         if return_embeddings:
             return x
@@ -108,10 +108,10 @@ class MultitaskGCN(MetaModule):
         if isinstance(task_selector, list): # we are in the concurrent case
             out = {}
             for t in task_selector:
-                out[t] = self.output_layer(x, inputs, t, params=get_subdict(params, 'output_layer'))
+                out[t] = self.output_layer(x, inputs, t, params=self.get_subdict(params, 'output_layer'))
             return out
         else:
-            x = self.output_layer(x, inputs, task_selector, params=get_subdict(params, 'output_layer'))
+            x = self.output_layer(x, inputs, task_selector, params=self.get_subdict(params, 'output_layer'))
             return x
         
 
@@ -178,8 +178,8 @@ class MultitaskGCN_2(MetaModule):
         if isinstance(task_selector, list): # we are in the concurrent case
             out = {}
             for t in task_selector:
-                out[t] = self.output_layer(x, inputs, t, params=get_subdict(params, 'output_layer'))
+                out[t] = self.output_layer(x, inputs, t, params=self.get_subdict(params, 'output_layer'))
             return out
         else:
-            x = self.output_layer(x, inputs, task_selector, params=get_subdict(params, 'output_layer'))
+            x = self.output_layer(x, inputs, task_selector, params=self.get_subdict(params, 'output_layer'))
             return x
